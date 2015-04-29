@@ -1,0 +1,66 @@
+name: "LeNet"
+layer {
+  name: "yaleB"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "yaleb_train_leveldb"
+    batch_size: 50
+  }
+}
+layer {
+  name: "yaleB"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "yaleb_test_leveldb"
+    batch_size: 300
+  }
+}
+layer {
+  name: "flat1"
+  type: "Flatten"
+  bottom: "data"
+  top: "flat1"
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "flat1"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  inner_product_param {
+    num_output: 100
+    bias_term: false 
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "ip1"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip1"
+  bottom: "label"
+  top: "loss"
+}

@@ -1,0 +1,34 @@
+name: "LeNet"
+input: "data"
+input_dim: 1
+input_dim: 262
+input_dim: 1
+input_dim: 1
+layer {
+  name: "flat1"
+  type: "Flatten"
+  bottom: "data"
+  top: "flat1"
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "flat1"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  inner_product_param {
+    num_output: 100
+    bias_term: false 
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "ip1"
+  top: "prob"
+}
